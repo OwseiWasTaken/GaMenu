@@ -2,9 +2,7 @@ from lib import * #My libary uses prompt, ErrorPrompt and list for costumizating
 from random import randint as rint
 import pickle
 
-NoOfOptions = 7
-RangeOfOptions = range(1, NoOfOptions+1)
-Options = [*RangeOfOptions]
+Options = range(1, 8)
 
 #intro!!
 print("*************************************")
