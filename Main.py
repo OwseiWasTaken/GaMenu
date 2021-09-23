@@ -6,9 +6,7 @@ print("                 Menu                ")
 print("*************************************")
 print()
 
-NoOfOptions = 6
-RangeOfOptions = range(1, NoOfOptions+1)
-Options = [*RangeOfOptions]
+Options = range(1, 7)
 
 ListOfOptions = "Which program do your want to use?\n 1. Hangman\n 2. Guess the Number\n 3. Calculator\n 4. RPG Sheet Editor\n 5. TestZone\n 6. Exit Prograram\n\nWrite your choice: "
 
