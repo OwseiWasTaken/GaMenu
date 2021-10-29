@@ -1,125 +1,92 @@
+#! /bin/python3.9
+
 #This is Anghie's library
-from random import *
+from random import randint as rint
+from sys import platform as OS
+from os import system as ss
 
-def GetInt(prompt = "Please enter a number: ", ErrorPrompt = None, list = [1, 2, 3]):
-	Intenger = input(prompt)
-	if not Intenger.isnumeric():
-		if ErrorPrompt == None:
-			print(f"\nPlease enter something that's in {list}\n")
-		else:
-			print(ErrorPrompt)
-		return GetInt(prompt = prompt, ErrorPrompt = ErrorPrompt, list = list)
-	Intenger = int(Intenger)
-	if list == None:
-		pass
-	else:
-		if Intenger not in list:
-			if ErrorPrompt == None:
-				print(f"\nPlease enter something that's in {list}")
-			else:
-				print(ErrorPrompt)
-			return GetInt(prompt = prompt, ErrorPrompt = ErrorPrompt, list = list)
-		else:
-			Intenger = int(Intenger)
-			return Intenger
+nop = lambda *a, **b:None # gets anything, does nothing and returns None
 
-def GetStr(prompt = "Please enter a string: ", ErrorPrompt = None, list = ["Y", "N"]):
+if OS in ["linux", "osx"]:
+	def clear():
+		ss("clear")
+elif OS == "windows":
+	def clear():
+		ss("cls")
+
+
+def r(end:object, offset = 0, diff = nop) -> int:
+	ret = range(len(end)+offset)
+	if diff != nop:
+		ret = diff(nop)
+	return ret
+
+def GetInt(prompt = "Enter a number:", Error = None, parse = eval):
+	while True:
+		ipt = input(prompt)
+		if [True for x in ipt if x in "0987654321+-"]:
+			return parse(ipt)
+		else:
+			if Error:
+				raise Error
+
+def GetStr(prompt = "Please enter a string:", Error = None, lst = None, parse = nop):
 	String = input(prompt)
-	String = String.upper()
-	if list == None:
-		pass
+	if parse != nop:
+		String = parse(String)
+	if not lst:
+		return String
 	else:
-		if String not in list:
-			if ErrorPrompt == None:
-				print(f"\nPlease enter something that's in {list}\n")
-			else:
-				print(ErrorPrompt)
-			return GetStr(prompt = prompt, ErrorPrompt = ErrorPrompt, list = list)
-		else:
+		if String in lst:
 			return String
-
-def GetOption(prompt = None, ErrorPrompt = None, list = ["1", "2", "3"]):
-
-	if prompt == None:
-		Option = input(f"Which option do you want? {list} (No need for captalization): ")
-	else:
-		Option = input(prompt)
-
-	if Option.isnumeric():
-		Option = int(Option)
-	else:
-		Option = Option.upper()
-
-	if Option not in list:
-		if ErrorPrompt == None:
-			print(f"\nPlease enter something that's in {list}\n")
 		else:
-			print(ErrorPrompt)
-		return GetOption(prompt = prompt, ErrorPrompt = ErrorPrompt, list = list)
-	else:
-		return Option
+			if Error:
+				raise Error
+			else:
+				print(f"\nPlease enter something that's in {lst}\n")
+			return GetStr(prompt, Error, lst)
+
 
 # Yo, this is a really IMPORTANT WARNING, if you for any reason, needs a specific roll, you MUST pay atention to what you are going to write as the 'prompt' cuz if u mess it up
 # It will not work!
 # The ''Create a Sheet' Roll' function will work as: prompt = "Run 6 D20".
-def Dice(EspecifictRoll = None, CustomDiceMax = None):
-
-	DicePrompt = " 1. D4		6. D20\n 2. D6		7. D100\n 3. D8		8. Custom Dice\n 4. D10		9. 'Create a Sheet' Roll\n 5. D12		10. Exit\n\nSelect a option: "
-	Min = 1
-	Roll = 0
-
-	if EspecifictRoll == None:	
-		WhichDice = GetOption(prompt = DicePrompt, list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+def dice(CustomDiceMax = None, CanRetryRolls = False):
+	if CustomDiceMax: # why? just use rint
+		return rint(0, CustomDiceMax)
 	else:
-		WhichDice = EspecifictRoll
+		Dices = [
+			2,  4,  6,  8,
+			10, 20, 50, 100,
+		] # len(Dices) needs to be even
+		offset = len(Dices)//2
+		for i in range(len(Dices)//2):
+			print(f"{i+1}. D{Dices[i]}    {i+offset+1}. D{Dices[i+offset]}")
+		print(f"{len(Dices)+1}. Custom {0}. Exit")
 
-	if WhichDice == 1 or "D4":
-		Max = 4
-	elif WhichDice == 2 or "D6":
-		Max = 6
-	elif WhichDice == 3 or "D8":
-		Max = 8
-	elif WhichDice == 4 or "D10":
-		Max = 10
-	elif WhichDice == 5 or "D12":
-		Max = 12
-	elif WhichDice == 6 or "D20":
-		Max = 20
-	elif WhichDice == 7 or "D100":
-		Max = 100
-	elif WhichDice == 8 or "Custom Dice":
-		if CustomDiceMax == None:
-			while True:
-				NewDice = input("What is the max number that you want? ")
-				if not NewDice.isnumeric():
-					print("Please remember that you need to enter a number")
-				else:
-					break
+		# gets dice option
+		while True:
+			WhichDice = GetInt(prompt = ">")-1
+			if WhichDice in [-1]+list(range(len(Dices)+1)): break
+
+		# set opt / exit / custom dice
+		if WhichDice in list(range(len(Dices))):
+			Max = Dices[WhichDice]
 		else:
-			NewDice = CustomDiceMax
-		Max = int(NewDice)
+			if WhichDice == 8:
+				while True:
+					Max = GetInt("What is the max number that you want:")
+					if Max > 0: break
+			else: # WhichDice == 0
+				return
+		# make roll
+		Roll = rint(1, Max) # min = 1
+		print(f"You rolled {Roll}!\n")
 
-	elif WhichDice == 9 or "Run 6 D20":
-		NescessariesRolls = 5
-		while NescessariesRolls != 0:
-			Max = 20
-			Roll = randint(Min, Max)
-			print(f"You rolled {Roll}")
-			NescessariesRolls = NescessariesRolls - 1
-	
-	elif WhichDice == 10:
-		print("Exiting 'Roll a Dice'")
-		return
-
-	Roll = randint(Min, Max)
-	print(f"You rolled {Roll}")
-	print()
-
-	if EspecifictRoll == None:
-		Confirmation = GetStr(prompt = "Do you want to roll again? ('y' for yes, and 'n' for no): ")
-		if Confirmation == "Y":
-			return Dice
-		elif Confirmation == "N":
+		if CanRetryRolls:
+			Confirmation = GetStr(prompt = "Do you want to roll again: [Y/n]").upper()
+			if Confirmation == "Y":
+				return dice(CustomDiceMax, CanRetryRolls)
+			elif Confirmation == "N":
+				return Roll
+		else:
 			return Roll
-	else:
-		return Roll
