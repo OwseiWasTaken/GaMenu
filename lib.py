@@ -55,12 +55,12 @@ def dice(CustomDiceMax = None, CanRetryRolls = False):
 		return rint(0, CustomDiceMax)
 	else:
 		Dices = [
-			2,  4,  6,  8,
+			2,	4,	6,	8,
 			10, 20, 50, 100,
 		] # len(Dices) needs to be even
 		offset = len(Dices)//2
 		for i in range(len(Dices)//2):
-			print(f"{i+1}. D{Dices[i]}    {i+offset+1}. D{Dices[i+offset]}")
+			print(f"{i+1}. D{Dices[i]}	  {i+offset+1}. D{Dices[i+offset]}")
 		print(f"{len(Dices)+1}. Custom {0}. Exit")
 
 		# gets dice option
@@ -90,3 +90,14 @@ def dice(CustomDiceMax = None, CanRetryRolls = False):
 				return Roll
 		else:
 			return Roll
+
+def SplitBracket(string:str, bracket:str, ClosingBracket='') -> str:
+	if ClosingBracket == '':
+		r = {
+		'(' : ')',
+		'[' : ']',
+		'{' : '}',
+		}
+		ClosingBracket = r[bracket]
+	return ClosingBracket.join(str(string).split( bracket)).split(ClosingBracket)
+
