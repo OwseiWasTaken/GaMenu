@@ -1,3 +1,7 @@
+from lib import *
+from math import sqrt
+
+#TODO panic &{}() system
 
 def main():
 	#Intro:
@@ -6,73 +10,38 @@ def main():
 	print("*************************************")
 	print()
 
-	def Valor1() -> int:
-		No1 = input("Write the first value: ")
-		if not No1.isnumeric():
-			print("It needs to be a number...")
-			return Valor1()
-		else:
-			No1 = eval(No1)
-			return No1
-
-	def Valor2() -> int:
-		No2 = input("Write the second value: ")
-		if not No2.isnumeric():
-			print("It needs to be a number...")
-			return Valor2()
-		else:
-			No2 = eval(No2)
-			return No2
-
-	def Operacao():
-		QualOp = input("What calculation do you wanna do? +, -, *, /, Root or Power? ")
-		QualOp = QualOp.upper()
-		if QualOp not in ["+", "-", "*", "/", "POWER", "ROOT"]:
-			print("+, -, *, /, Root or Power...")
-			return Operacao()
-		else:
-			return QualOp
-
-	Op = Operacao()
-	Var1 = Valor1()
-	Var2 = Valor2()
-	Continuar = None
-
+	mem = {}
 	while True:
-		if Op == "+":
-			total = Var1 + Var2
-			print(total)
-		elif Op == "-":
-			total = Var1 - Var2
-			print(total)
-		elif Op == "*":
-			total = Var1 * Var2
-			print(total)
-		elif Op == "/":
-			total = Var1 / Var2
-			print(total)
-		elif Op == "POWER":
-			total = Var1 ** Var2
-			print(total)
-		elif Op == "ROOT":
-			total = Var1 ** (1/Var2)
-			print(total)
-		print()
+		op = input('>')
+		memname = "\x00" # \x00 not "inputable"
 
-		Continuar = input("Want to do another calculation? 'Y' for yes and 'N' for no: ")
+		if '=' in op: # mem def
+			assert op.count('=') == 1, "more deffinitions than possible!"
+			memname, op = op.split('=')
+			op = op.strip()
+			memname = memname.strip()
 
-		while True:
-			if Continuar not in ["Y", "y", "N", "n"]:
-				print("Please, 'Y' or 'N'")
-				Continuar = input("'Y' for yes and 'N' for no: ")
-			else:
-				break
+		if '{' in op: # if var replace
+			op = SplitBracket(op, '{')
+			for opi in range(len(op)): # "3{x}5" -> ['3', 'x', '5']
+				if opi%2: # get every OTHER var (if in {} index will be even)
+					assert op[opi] in mem.keys(), "Var Reference [%s] Not Found In Memory [%s]" % (op[opi], (mem if len(mem) < 20 else "mem size too big"))
+					if op[opi] in mem.keys():
+						op[opi] = mem[op[opi]]
 
-		if Continuar in ["N", "n"]:
-			break
+			op = ''.join(op)
+		# op now is just numbers and +-... symbols
+		try:
+			try:
+				evldop = eval(op)
+			except SyntaxError:
+				assert 0, "can't compute operation \"%s\"" % op
+		except NameError:
+			assert 0, "can't find external Reference \"%s\"" % op
+		if memname == "\x00":
+			print(evldop)
+		else:
+			mem[memname] = str(evldop)
 
-		Op = Operacao()
-		Var1 = Valor1()
-		Var2 = Valor2()
 
 if __name__ == "__main__":main()
