@@ -101,3 +101,8 @@ def SplitBracket(string:str, bracket:str, ClosingBracket='') -> str:
 		ClosingBracket = r[bracket]
 	return ClosingBracket.join(str(string).split( bracket)).split(ClosingBracket)
 
+def GetIn(GetFunc, Ifin, *GetFuncArgs, **GetFuncKwArgs):
+	while True:
+		ipt = GetFunc(*GetFuncArgs, **GetFuncKwArgs)
+		if ipt in Ifin:
+			return ipt
