@@ -6,41 +6,49 @@ import adivinhacao
 #import forca
 
 print("********************************************")
-print("*				   Menu					  *")
-print("********************************************\n")
+print("*                   Menu                   *")
+print("********************************************")
 print()
 
-ListOfOptions = "\
-Which program do your want to use?\n\
-1. Hangman [Under development]\n\
-2. Guess the Number\n\
-3. Calculator\n\
-4. RPG Sheet Editor\n\
-5. TestZone\n\
-6. Exit Prograram\
-\n\n\
-Write your choice: "
+ListOfOptions = """
+Which program do your want to use?
+1. Hangman [Under development]
+2. Guess the Number
+3. Calculator
+4. RPG Sheet Editor
+5. TestZone
+6. Exit Prograram
+
+
+Write your choice:
+"""[1:-1] # [...] cus \n at start and end
+class OP:
+	HANGMAN = 1
+	GUESS = 2
+	CALC = 3
+	RPG = 4
+	TEST = 5
+	EXIT = 6
 
 while True:
 	clear()
 	print(ListOfOptions)
-	while True:
-		Doing = GetInt(">")
-		if Doing in range(1, 7):break
-	if Doing == 1: #Forca
-		assert False, "Under development"
-	elif Doing == 2: #adivinhacao
-		print("Now running 'Guess the Number'\n")
-		adivinhacao.main()
-	elif Doing == 3:
-		print("Now running 'Calculator'\n")
-		calculadora.main()
-	elif Doing == 4:
-		print("Now running 'RPG Sheet Editor'\n")
-		RpgSheet.main()
-	elif Doing == 5:
-		print("Now running 'TestZone'\n")
-		TestZone.main()
-	elif Doing == 6:
-		print("Exiting...")
-		break
+	Doing = GetIn(GetInt, range(1, 8), '>')
+	match Doing:
+		case OP.HANGMAN:
+			assert False, "Under development"
+		case OP.GUESS:
+			print("Now running 'Guess the Number'\n")
+			adivinhacao.main()
+		case OP.CALC:
+			print("Now running 'Calculator'\n")
+			calculadora.main()
+		case OP.RPG:
+			print("Now running 'RPG Sheet Editor'\n")
+			RpgSheet.main()
+		case OP.TEST:
+			print("Now running 'TestZone'\n")
+			TestZone.main()
+		case OP.EXIT:
+			print("Exiting...")
+			break
