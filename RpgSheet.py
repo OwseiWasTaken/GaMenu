@@ -4,56 +4,94 @@ from dataclasses import dataclass
 import sys
 #TODO safer design
 
-
 print("*************************************")
 print("  Welcome to the RPG Sheet Editor!!	")
 print("*************************************\n")
 
 types = (
 	"Create a new Sheet",
+	"List Sheets",
 	"Show a Sheet",
 	"Level Up",
 	"Roll Dice",
+	"Delete Sheet",
 	"Save",
 	"Load",
+	"Clear",
 	"Exit",
 )
+
 def main():
-	class OP:
-		MakeSheet = 0
-		PrintSheet = 1
-		LevelUp = 2
-		RollDice = 3
-		Save = 4
-		Load = 5
-		Exit = 6
+	class OP(IntEnum):
+		MakeSheet = auto()
+		ListSheets = auto()
+		PrintSheet = auto()
+		LevelUp = auto()
+		RollDice = auto()
+		DeleteSheet = auto()
+		Save = auto()
+		Load = auto()
+		Clear = auto()
+		Exit = auto()
+		COUNT = auto()
+
 	Sheets = []
-	Sheets.append(Sheet("pedro", 100, Stats(0, 0, 0, 0, 0, 2)))
-	Sheets.append(Sheet("owsei", 100, Stats(2, 0, 0, 0, 0, 0)))
+	#Sheets.append(Sheet("pedro", 100, Stats(0, 0, 0, 0, 0, 2)))
+	#Sheets.append(Sheet("owsei", 100, Stats(2, 0, 0, 0, 0, 0)))
+	#Sheets.append(Sheet("o", 100, Stats(2, 2, 2, 2, 2, 2)))
+	def PrintSheet():
+		nonlocal Sheets
+		for i in r(Sheets):
+			print(f"{i+1}: {Sheets[i].Name}")
 	while True:
 		for i in r(types):
 			print(f"{i+1}: {types[i]}")
-		Doing = GetIn(GetInt, range(1, 8), '>')-1
+		Doing = GetIn(GetInt, range(1, OP.COUNT), '>')
+		print()
 		match Doing:
 			case OP.MakeSheet:# make sheet
 				Sheets.append(MakeSheet())
+				Sheets = sorted(Sheets)
 			case OP.PrintSheet:
-				for i in r(Sheets):
-					print(f"{i+1}: {Sheets[i].Name}")
-				ShowSheet = GetIn(GetInt, range(len(Sheets)+1), '>')-1
+				PrintSheet()
+				ShowSheet = GetIn(GetInt, range(len(Sheets)+1), 'Sheet$')-1
 				PrintSheet(Sheets[ShowSheet])
-				continue
+			case OP.ListSheets:
+				PrintSheet()
+				print('\n')
 			case OP.LevelUp:pass
 			case OP.RollDice:pass
+			case OP.DeleteSheet:
+				PrintSheet()
 			case OP.Save:
-				Save(Sheets)
+				UseFile("rpg.dat", Sheets)
 			case OP.Load:
 				#TODO
 				#if Sheets:
-				Sheets = Load(Sheets)
+				ld = UseFile("rpg.dat")
+				ldr = False # load will remove
+				rms:list[Sheet] = [] # removes
+				if Sheets:
+					for i in r(ld):
+						if not Sheets[i] in ld:
+							ldr = True
+							rms.append(Sheets[i].Name)
+				if ldr:
+					print("loading error")
+					print(f"there are {len(rms)} created sheets that are not in rpg file")
+					print("replace or append? [r/a]")
+					x = GetIn(input, ['r', 'R', 'a', 'A'], '>').lower()
+					if x == 'r':
+						Sheets = ld # replace
+					else:
+						Sheets = list(set([*Sheets, *ld])) # append (ironically doens't uses append)
+				else:
+					Sheets = ld
+
+			case OP.Clear:
+				clear()
 			case OP.Exit:
 				exit(0)
-		clear()
 
 
 		#The ideia is simple: It shows all currents stats, and how many points we have + health that would be gained and mana...
@@ -73,6 +111,9 @@ class Sheet:
 	Name:str
 	Health:int
 	Stats:Stats
+	def __gt__(this, x):
+		assert type(x) == Sheet
+		return this.Name > x.Name
 
 def PrintSheet(sheet):
 	print(f"""
@@ -90,15 +131,6 @@ Stats:
 
 def LevelUp():pass
 def RollDice():pass
-
-def Save(sheets: list[Sheet]):
-	pickle.dump(sheets, (f:=open("rpg.dat", 'bw')))
-	f.close()
-
-def Load():
-	ld = pickle.load((f:=open("rpg.dat", 'br')))
-	f.close()
-	return ld
 
 def Get(prompt, confs = "is \"%s\" right?", conflist = ['Y', 'y', "yes", "Yes", "YES"], GetFunc = input):
 	ipt = GetFunc(prompt)

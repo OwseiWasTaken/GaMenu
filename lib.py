@@ -1,9 +1,11 @@
 #! /bin/python3.9
 
-#This is Anghie's library
+#This is Anghie's library (owsei's mod tho)
 from random import randint as rint
 from sys import platform as OS
 from os import system as ss
+from enum import IntEnum, Enum, auto
+from pickle import dump as _PickleDump, load as _PickleLoad
 
 nop = lambda *a, **b:None # gets anything, does nothing and returns None
 
@@ -94,3 +96,10 @@ def GetIf(GetFunc, IfFunc, *GetFuncArgs, **GetFuncKwArgs):
 	while True:
 		ipt = GetFunc(*GetFuncArgs, **GetFuncKwArgs)
 		if IfFunc(ipt):return ipt
+
+def UseFile(file: str, obj = None):
+	if obj == None:
+		return _PickleLoad(open(file, 'rb'))
+	else:
+		_PickleDump(obj, open(file, 'wb'))
+		return None
