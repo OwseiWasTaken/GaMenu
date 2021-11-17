@@ -28,18 +28,16 @@ def main():
 
 			ActualTest = GetOption(prompt=question, list=options)
 
+		lower = "abcdefghijklmnopqrstuvwxyz"
+		upper = lower.upper()
+		numbers = "0123456789"
+		symbols = r"_({[]})*;:/,.-@#$ "
+		all = lower+upper+numbers+symbols
+		leght = 16
 		# Password Maker
 		while ActualTest == 2:
-			lower = "abcdefghijklmnopqrstuvwxyz"
-			upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-			numbers = "0123456789"
-			symbols = "[]{}()*;/,_-@#$ "
-
-			all = lower+upper+numbers+symbols
-
-			leght = 16
 			password = "".join(random.sample(all,leght))
-			print(f"\nPassword generated: {password}\n")
+			print(f"\nGenerated Password : {password}\n")
 
 			ActualTest = GetOption(prompt=question, list=options)
 
