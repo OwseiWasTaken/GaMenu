@@ -1,6 +1,6 @@
 #Intro:
 print("*************************************")
-print("          Welcome to Hangman         ")
+print("			 Welcome to Hangman			")
 print("*************************************")
 print()
 
@@ -10,3 +10,4 @@ Tentativas = 0
 
 print()
 print(f"Sua pontuação foi de: {Score}! Com {Tentativas} tentativas")
+
