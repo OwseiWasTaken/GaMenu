@@ -30,23 +30,6 @@ def GetInt(prompt = "Enter a number:", Error = None, parse = eval):
 			if Error:
 				raise Error
 
-def GetStr(prompt = "Please enter a string:", Error = None, lst = None, parse = nop):
-	String = input(prompt)
-	if parse != nop:
-		String = parse(String)
-	if not lst:
-		return String
-	else:
-		if String in lst:
-			return String
-		else:
-			if Error:
-				raise Error
-			else:
-				print(f"\nPlease enter something that's in {lst}\n")
-			return GetStr(prompt, Error, lst)
-
-
 # Yo, this is a really IMPORTANT WARNING, if you for any reason, needs a specific roll, you MUST pay atention to what you are going to write as the 'prompt' cuz if u mess it up
 # It will not work!
 # The ''Create a Sheet' Roll' function will work as: prompt = "Run 6 D20".
@@ -106,3 +89,8 @@ def GetIn(GetFunc, Ifin, *GetFuncArgs, **GetFuncKwArgs):
 		ipt = GetFunc(*GetFuncArgs, **GetFuncKwArgs)
 		if ipt in Ifin:
 			return ipt
+
+def GetIf(GetFunc, IfFunc, *GetFuncArgs, **GetFuncKwArgs):
+	while True:
+		ipt = GetFunc(*GetFuncArgs, **GetFuncKwArgs)
+		if IfFunc(ipt):return ipt
