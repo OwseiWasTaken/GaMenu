@@ -62,6 +62,7 @@ def TestAll(cls):
 		print(f"all tests for \"{clsname}\" passed")
 
 def main():
+	example()
 	pass
 
 if __name__ == "__main__":main()

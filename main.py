@@ -18,7 +18,7 @@ Which program do your want to use?
 2. Guess the Number
 3. Calculator
 4. RPG Sheet Editor
-5. TestZone [udev]
+5. TestZone
 6. Exit Prograram
 
 
