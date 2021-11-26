@@ -14,15 +14,15 @@ menu = """
 """
 ListOfOptions = """
 Which program do your want to use?
-1. Hangman [Under development]
+1. Hangman [udev]
 2. Guess the Number
 3. Calculator
 4. RPG Sheet Editor
-5. TestZone [Under development]
+5. TestZone [udev]
 6. Exit Prograram
 
 
-Write your choice:
+Your choice:
 """
 
 class OP(IntEnum):
@@ -35,6 +35,7 @@ class OP(IntEnum):
 	COUNT = auto()
 
 def main():
+	print(menu)
 	while True:
 		clear()
 		print(ListOfOptions)

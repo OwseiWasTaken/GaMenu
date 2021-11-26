@@ -2,7 +2,8 @@
 import sys
 def main():
 	if not "--dev" in sys.argv:
-		assert 0, "under dev!"
+		sys.stderr.write("under dev!\n")
+		sys.exit(0x1)
 	print("forca.py!")
 	input()
 
