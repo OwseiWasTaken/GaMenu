@@ -2,7 +2,7 @@
 
 #This is Anghie's library (owsei's mod tho)
 from random import randint as rint
-from sys import platform as OS
+from sys import platform as OS, stderr, stdout, argv, exit # stderr for errors, stdout for output
 from os import system as ss
 from enum import IntEnum, Enum, auto
 from pickle import dump as _PickleDump, load as _PickleLoad
@@ -103,3 +103,8 @@ def UseFile(file: str, obj = None):
 	else:
 		_PickleDump(obj, open(file, 'wb'))
 		return None
+
+def fprint(Handler, String):
+	Handler.write(String)
+
+

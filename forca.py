@@ -1,9 +1,10 @@
+from lib import *
+
 #Intro:
-import sys
 def main():
-	if not "--dev" in sys.argv:
-		sys.stderr.write("under dev!\n")
-		sys.exit(0x1)
+	if not "--dev" in argv:
+		fprint(stderr, "under dev!\n")
+		exit(0x1)
 	print("forca.py!")
 	input()
 
