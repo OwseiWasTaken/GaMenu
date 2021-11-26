@@ -1,16 +1,10 @@
 #Intro:
-def main()
-	print("*************************************")
-	print("			 Welcome to Hangman			")
-	print("*************************************")
-	print()
-
-	ContiuarJogo = "y"
-	Score = 0
-	Tentativas = 0
-
-	print()
-	print(f"Sua pontuação foi de: {Score}! Com {Tentativas} tentativas")
+import sys
+def main():
+	if not "--dev" in sys.argv:
+		assert 0, "under dev!"
+	print("yeet me daddy!")
+	input()
 
 if __name__ == "__main__":
 	main()

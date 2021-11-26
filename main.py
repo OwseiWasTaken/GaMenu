@@ -41,7 +41,7 @@ def main():
 		Doing = GetIn(GetInt, range(1, OP.COUNT), '>')
 		match Doing:
 			case OP.HANGMAN:
-				assert 0, "Under development"
+				print("Now running 'Hangman'\n")
 				forca()
 			case OP.GUESS:
 				print("Now running 'Guess the Number'\n")
